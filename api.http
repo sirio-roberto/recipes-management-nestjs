@@ -1,2 +1,18 @@
 ###
 GET http://localhost:3000/
+###
+GET http://localhost:3000/recipes
+###
+POST http://localhost:3000/recipes/new
+Content-Type: application/json
+
+{
+   "name": "Fresh Mint Tea",
+   "description": "Light, aromatic and refreshing beverage, ...",
+   "ingredients": ["boiled water", "honey", "fresh mint leaves"],
+   "directions": ["Boil water", "Pour boiling hot water into a mug", "Add fresh mint leaves", "Mix and let the mint leaves seep for 3-5 minutes", "Add honey and mix again"]
+}
+###
+GET http://localhost:3000/recipes/4
+###
+DELETE http://localhost:3000/recipes/5

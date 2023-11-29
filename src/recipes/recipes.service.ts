@@ -57,7 +57,7 @@ export class RecipesService {
   }
 
   update(id: number, updateRecipeDto: UpdateRecipeDto) {
-    return `This action updates a #${id} recipe`;
+    return `This action updates a #${updateRecipeDto.id} recipe`;
   }
 
   async remove(id: number) {
