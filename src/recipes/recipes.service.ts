@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { Recipe } from './entities/recipe.entity';
 import { Repository } from 'typeorm';
@@ -29,21 +29,25 @@ export class RecipesService {
   }
 
   async findOne(id: number) {
-    let recipe: Recipe = await this.recipeRepo.findOneOrFail({
-      select: {
-        name: true,
-        description: true,
-        ingredients: true,
-        directions: true,
-      },
-      where: {
-        id,
-      },
-    });
+    try {
+      let recipe: Recipe = await this.recipeRepo.findOneOrFail({
+        select: {
+          name: true,
+          description: true,
+          ingredients: true,
+          directions: true,
+        },
+        where: {
+          id,
+        },
+      });
 
-    recipe = this.jsonParseArrayFields(recipe);
+      recipe = this.jsonParseArrayFields(recipe);
 
-    return recipe;
+      return recipe;
+    } catch {
+      throw new NotFoundException('Recipe not found');
+    }
   }
 
   jsonParseArrayFields(recipe: Recipe): Recipe {
@@ -56,7 +60,8 @@ export class RecipesService {
     return `This action updates a #${id} recipe`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} recipe`;
+  async remove(id: number) {
+    await this.findOne(id);
+    this.recipeRepo.delete(id);
   }
 }
