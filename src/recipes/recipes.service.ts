@@ -1,23 +1,55 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { Recipe } from './entities/recipe.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class RecipesService {
-  private recipe: Recipe = null;
+  constructor(
+    @InjectRepository(Recipe) private recipeRepo: Repository<Recipe>,
+  ) {}
 
-  create(recipe: Recipe) {
-    this.recipe = recipe;
-    return this.recipe;
+  async create(recipe: Recipe) {
+    recipe = this.jsonStringfyArrayFields(recipe);
+
+    const createdRecipe = await this.recipeRepo.save(recipe);
+    return { id: createdRecipe.id };
   }
 
-  findAll() {
-    return this.recipe;
+  jsonStringfyArrayFields(recipe: Recipe): Recipe {
+    recipe.ingredients = JSON.stringify(recipe.ingredients as string[]);
+    recipe.directions = JSON.stringify(recipe.directions as string[]);
+    return recipe;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} recipe`;
+  async findAll() {
+    const recipes = await this.recipeRepo.find();
+    return recipes.map((recipe) => this.jsonParseArrayFields(recipe));
+  }
+
+  async findOne(id: number) {
+    let recipe: Recipe = await this.recipeRepo.findOneOrFail({
+      select: {
+        name: true,
+        description: true,
+        ingredients: true,
+        directions: true,
+      },
+      where: {
+        id,
+      },
+    });
+
+    recipe = this.jsonParseArrayFields(recipe);
+
+    return recipe;
+  }
+
+  jsonParseArrayFields(recipe: Recipe): Recipe {
+    recipe.ingredients = JSON.parse(recipe.ingredients as string);
+    recipe.directions = JSON.parse(recipe.directions as string);
+    return recipe;
   }
 
   update(id: number, updateRecipeDto: UpdateRecipeDto) {

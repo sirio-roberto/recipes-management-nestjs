@@ -15,7 +15,7 @@ import { Recipe } from './entities/recipe.entity';
 export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
 
-  @Post()
+  @Post('new')
   create(@Body() recipe: Recipe) {
     return this.recipesService.create(recipe);
   }
