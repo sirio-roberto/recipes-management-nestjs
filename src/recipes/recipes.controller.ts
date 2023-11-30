@@ -3,15 +3,14 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   HttpCode,
   HttpStatus,
   ParseIntPipe,
+  Put,
 } from '@nestjs/common';
 import { RecipesService } from './recipes.service';
-import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { Recipe } from './entities/recipe.entity';
 
 @Controller('recipes')
@@ -33,12 +32,10 @@ export class RecipesController {
     return this.recipesService.findOne(id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id', new ParseIntPipe()) id: number,
-    @Body() updateRecipeDto: UpdateRecipeDto,
-  ) {
-    return this.recipesService.update(id, updateRecipeDto);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Put(':id')
+  update(@Param('id', new ParseIntPipe()) id: number, @Body() recipe: Recipe) {
+    return this.recipesService.update(id, recipe);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)

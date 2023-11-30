@@ -1,5 +1,12 @@
-import { ArrayMinSize, IsArray, IsNotEmpty, IsString } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsDate,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Recipe {
@@ -10,6 +17,11 @@ export class Recipe {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @Column()
+  @IsString()
+  @IsNotEmpty()
+  category: string;
 
   @Column()
   @IsString()
@@ -27,4 +39,14 @@ export class Recipe {
   @IsArray()
   @ArrayMinSize(1)
   directions: string[] | string;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @IsDate()
+  @IsOptional()
+  date?: Date;
+
+  @BeforeUpdate()
+  updateDate() {
+    this.date = new Date();
+  }
 }
