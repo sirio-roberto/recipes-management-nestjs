@@ -9,6 +9,7 @@ import {
   HttpStatus,
   ParseIntPipe,
   Put,
+  Query,
 } from '@nestjs/common';
 import { RecipesService } from './recipes.service';
 import { Recipe } from './entities/recipe.entity';
@@ -25,6 +26,14 @@ export class RecipesController {
   @Get()
   findAll() {
     return this.recipesService.findAll();
+  }
+
+  @Get('search')
+  findByCategoryOrName(
+    @Query('category') category: string,
+    @Query('name') name: string,
+  ) {
+    return this.recipesService.findByCategoryOrName({ category, name });
   }
 
   @Get(':id')

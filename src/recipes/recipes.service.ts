@@ -1,6 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Recipe } from './entities/recipe.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -61,5 +65,38 @@ export class RecipesService {
   async remove(id: number) {
     await this.findOne(id);
     this.recipeRepo.delete(id);
+  }
+
+  async findByCategoryOrName(props: any) {
+    if (
+      !props ||
+      Object.keys(props).length !== 2 ||
+      (!props.category && !props.name) ||
+      (props.category && props.name)
+    ) {
+      throw new BadRequestException(
+        'Please specify only category or name search parameter',
+      );
+    }
+
+    let recipes: Recipe[] = [];
+    if (props.category) {
+      recipes = await this.recipeRepo.find({
+        where: {
+          category: ILike(`${props.category}`),
+        },
+        order: { date: 'DESC' },
+      });
+    } else {
+      recipes = await this.recipeRepo.find({
+        where: {
+          name: ILike(`%${props.name}%`),
+        },
+        order: { date: 'DESC' },
+      });
+    }
+
+    recipes.map(this.jsonParseArrayFields);
+    return recipes;
   }
 }

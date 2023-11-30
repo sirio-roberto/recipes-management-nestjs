@@ -7,11 +7,11 @@ POST http://localhost:3000/recipes/new
 Content-Type: application/json
 
 {
-   "name": "Fresh Mint Tea",
+   "name": "warming ginger tea",
+   "category": "beverage",
    "description": "Light, aromatic and refreshing beverage, ...",
    "ingredients": ["boiled water", "honey", "fresh mint leaves"],
-   "directions": ["Boil water", "Pour boiling hot water into a mug", "Add fresh mint leaves", "Mix and let the mint leaves seep for 3-5 minutes", "Add honey and mix again"],
-   "category": "beverage"
+   "directions": ["Boil water", "Pour boiling hot water into a mug", "Add fresh mint leaves", "Mix and let the mint leaves seep for 3-5 minutes", "Add honey and mix again"]
 }
 ###
 PUT http://localhost:3000/recipes/3
@@ -28,3 +28,5 @@ Content-Type: application/json
 GET http://localhost:3000/recipes/3
 ###
 DELETE http://localhost:3000/recipes/5
+###
+GET http://localhost:3000/recipes/search?categorsy=bevErage&name=sh
