@@ -5,9 +5,11 @@ import {
   Body,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller()
 export class UsersController {
@@ -19,6 +21,7 @@ export class UsersController {
     return this.usersService.create(user);
   }
 
+  @UseGuards(AuthGuard('basic'))
   @Get('users')
   findAll() {
     return this.usersService.findAll();

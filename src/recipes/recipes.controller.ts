@@ -10,10 +10,13 @@ import {
   ParseIntPipe,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { RecipesService } from './recipes.service';
 import { Recipe } from './entities/recipe.entity';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('basic'))
 @Controller('recipes')
 export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
