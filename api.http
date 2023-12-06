@@ -17,7 +17,8 @@ Content-Type: application/json
    "directions": ["Boil water", "Pour boiling hot water into a mug", "Add fresh mint leaves", "Mix and let the mint leaves seep for 3-5 minutes", "Add honey and mix again"]
 }
 ###
-PUT http://localhost:3000/recipes/3
+PUT http://localhost:3000/recipes/2
+Authorization: {{auth}}
 Content-Type: application/json
 
 {
@@ -28,9 +29,11 @@ Content-Type: application/json
    "category": "beverage"
 }
 ###
-GET http://localhost:3000/recipes/3
+GET http://localhost:3000/recipes/2
+Authorization: {{auth}}
 ###
-DELETE http://localhost:3000/recipes/5
+DELETE http://localhost:3000/recipes/2
+Authorization: {{auth}}
 ###
 GET http://localhost:3000/recipes/search?categorsy=bevErage&name=sh
 ###
@@ -41,6 +44,6 @@ POST http://localhost:3000/register
 Content-Type: application/json
 
 {
-   "email": "2@sirius.com",
+   "email": "1@sirius.com",
    "password": "12345678"
 }
