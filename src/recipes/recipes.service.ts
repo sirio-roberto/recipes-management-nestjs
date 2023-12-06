@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -55,8 +56,12 @@ export class RecipesService {
     return recipe;
   }
 
-  async update(id: number, recipe: Recipe) {
-    await this.findOne(id);
+  async update(id: number, recipe: Recipe, user: User) {
+    const dbRecipe = await this.findOne(id);
+    if (user.id !== dbRecipe.userId) {
+      throw new ForbiddenException("You cannot modify other user's recipe");
+    }
+    recipe.userId = user.id;
 
     recipe = this.jsonStringfyArrayFields(recipe);
     recipe.date = new Date();
@@ -64,8 +69,11 @@ export class RecipesService {
     this.recipeRepo.update(id, recipe);
   }
 
-  async remove(id: number) {
-    await this.findOne(id);
+  async remove(id: number, user: User) {
+    const dbRecipe = await this.findOne(id);
+    if (user.id !== dbRecipe.userId) {
+      throw new ForbiddenException("You cannot delete other user's recipe");
+    }
     this.recipeRepo.delete(id);
   }
 

@@ -3,6 +3,7 @@
 GET http://localhost:3000/
 ###
 GET http://localhost:3000/recipes
+Authorization: {{auth}}
 ###
 POST http://localhost:3000/recipes/new
 Authorization: {{auth}}

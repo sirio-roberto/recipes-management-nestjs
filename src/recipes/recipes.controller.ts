@@ -47,13 +47,17 @@ export class RecipesController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Put(':id')
-  update(@Param('id', new ParseIntPipe()) id: number, @Body() recipe: Recipe) {
-    return this.recipesService.update(id, recipe);
+  update(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body() recipe: Recipe,
+    @Request() req: any,
+  ) {
+    return this.recipesService.update(id, recipe, req.user);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  remove(@Param('id', new ParseIntPipe()) id: number) {
-    return this.recipesService.remove(id);
+  remove(@Param('id', new ParseIntPipe()) id: number, @Request() req: any) {
+    return this.recipesService.remove(id, req.user);
   }
 }
