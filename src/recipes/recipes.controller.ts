@@ -11,6 +11,7 @@ import {
   Put,
   Query,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { RecipesService } from './recipes.service';
 import { Recipe } from './entities/recipe.entity';
@@ -22,8 +23,8 @@ export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
 
   @Post('new')
-  create(@Body() recipe: Recipe) {
-    return this.recipesService.create(recipe);
+  create(@Body() recipe: Recipe, @Request() req: any) {
+    return this.recipesService.create(recipe, req.user);
   }
 
   @Get()

@@ -6,7 +6,15 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import {
+  BeforeUpdate,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Recipe {
@@ -44,6 +52,14 @@ export class Recipe {
   @IsDate()
   @IsOptional()
   date?: Date;
+
+  @ManyToOne(() => User, (user) => user.recipe, { eager: false })
+  @JoinColumn({ name: 'userId' })
+  createdBy: User;
+
+  @Column()
+  @IsOptional()
+  userId: number;
 
   @BeforeUpdate()
   updateDate() {

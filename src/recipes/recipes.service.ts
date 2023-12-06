@@ -6,6 +6,7 @@ import {
 import { Recipe } from './entities/recipe.entity';
 import { ILike, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class RecipesService {
@@ -13,9 +14,10 @@ export class RecipesService {
     @InjectRepository(Recipe) private recipeRepo: Repository<Recipe>,
   ) {}
 
-  async create(recipe: Recipe) {
+  async create(recipe: Recipe, user: User) {
     recipe = this.jsonStringfyArrayFields(recipe);
 
+    recipe.userId = user.id;
     const createdRecipe = await this.recipeRepo.save(recipe);
     return { id: createdRecipe.id };
   }

@@ -1,9 +1,11 @@
+@auth = Basic 2@sirius.com:12345678
 ###
 GET http://localhost:3000/
 ###
 GET http://localhost:3000/recipes
 ###
 POST http://localhost:3000/recipes/new
+Authorization: {{auth}}
 Content-Type: application/json
 
 {
@@ -32,6 +34,7 @@ DELETE http://localhost:3000/recipes/5
 GET http://localhost:3000/recipes/search?categorsy=bevErage&name=sh
 ###
 GET http://localhost:3000/users
+Authorization: {{auth}}
 ###
 POST http://localhost:3000/register
 Content-Type: application/json
